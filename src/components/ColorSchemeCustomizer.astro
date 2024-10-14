@@ -1,0 +1,140 @@
+---
+---
+
+<div class="color-scheme-customizer">
+  <h3>Personaliza los colores</h3>
+  <div class="color-inputs">
+    <label>
+      Color primario:
+      <input type="color" id="primary-color" name="primary-color" value="#4299e1">
+    </label>
+    <label>
+      Color secundario:
+      <input type="color" id="secondary-color" name="secondary-color" value="#48bb78">
+    </label>
+    <label>
+      Color de acento:
+      <input type="color" id="accent-color" name="accent-color" value="#ed64a6">
+    </label>
+  </div>
+  <button id="apply-colors">Aplicar colores</button>
+  <button id="reset-colors">Restablecer colores</button>
+</div>
+
+<style>
+  .color-scheme-customizer {
+    background-color: var(--background);
+    border: 1px solid var(--primary);
+    border-radius: 5px;
+    padding: 1rem;
+    margin-top: 2rem;
+  }
+
+  .color-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  input[type="color"] {
+    width: 50px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  button {
+    background-color: var(--primary);
+    color: var(--background);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 1rem;
+  }
+
+  button:hover {
+    background-color: var(--accent);
+  }
+
+  #reset-colors {
+    background-color: var(--background);
+    color: var(--text);
+    border: 1px solid var(--primary);
+  }
+
+  #reset-colors:hover {
+    background-color: var(--primary);
+    color: var(--background);
+  }
+</style>
+
+<script>
+  const primaryColorInput = document.getElementById('primary-color');
+  const secondaryColorInput = document.getElementById('secondary-color');
+  const accentColorInput = document.getElementById('accent-color');
+  const applyButton = document.getElementById('apply-colors');
+  const resetButton = document.getElementById('reset-colors');
+
+  const defaultColors = {
+    primary: '#4299e1',
+    secondary: '#48bb78',
+    accent: '#ed64a6'
+  };
+
+  function applyColors(colors) {
+    document.documentElement.style.setProperty('--primary', colors.primary);
+    document.documentElement.style.setProperty('--secondary', colors.secondary);
+    document.documentElement.style.setProperty('--accent', colors.accent);
+
+    primaryColorInput.value = colors.primary;
+    secondaryColorInput.value = colors.secondary;
+    accentColorInput.value = colors.accent;
+
+    localStorage.setItem('custom-colors', JSON.stringify(colors));
+  }
+
+  applyButton.addEventListener('click', () => {
+    const colors = {
+      primary: primaryColorInput.value,
+      secondary: secondaryColorInput.value,
+      accent: accentColorInput.value
+    };
+    applyColors(colors);
+  });
+
+  resetButton.addEventListener('click', () => {
+    applyColors(defaultColors);
+  });
+
+  // Apply saved custom colors on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedColors = JSON.parse(localStorage.getItem('custom-colors'));
+    if (savedColors) {
+      applyColors(savedColors);
+    }
+  });
+
+  // Add color preview on hover
+  const colorInputs = document.querySelectorAll('input[type="color"]');
+  colorInputs.forEach(input => {
+    const originalColor = getComputedStyle(document.documentElement).getPropertyValue(`--${input.id.split('-')[0]}`);
+    
+    input.addEventListener('mouseover', () => {
+      document.documentElement.style.setProperty(`--${input.id.split('-')[0]}`, input.value);
+    });
+
+    input.addEventListener('mouseout', () => {
+      document.documentElement.style.setProperty(`--${input.id.split('-')[0]}`, originalColor);
+    });
+  });
+</script>

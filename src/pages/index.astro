@@ -1,0 +1,131 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Juanlu - Inicio">
+  <div class="hero">
+    <h1 id="typing-header"></h1>
+    <p class="subtitle">Telecommunications Engineer | MsC AI & Big Data ~ Full Stack Developer</p>
+    <div class="cta-buttons">
+      <a href="/about" class="cta-button primary">Sobre mí</a>
+      <a href="/contact" class="cta-button secondary">Contacto</a>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 180px);
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(45deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientAnimation 5s ease infinite;
+    background-size: 200% 200%;
+  }
+
+  @keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease forwards 0.5s;
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease forwards 1s;
+  }
+
+  .cta-button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .cta-button.primary {
+    background-color: var(--primary);
+    color: var(--background);
+  }
+
+  .cta-button.secondary {
+    background-color: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+  }
+
+  .cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+    }
+  }
+</style>
+
+<script>
+  // Typing animation
+  const typingHeader = document.getElementById('typing-header');
+  const text = "Hey, I'm Juanlu!";
+  let i = 0;
+
+  function typeWriter() {
+    if (typingHeader && i < text.length) {
+      typingHeader.textContent += text.charAt(i);
+      i++;
+      setTimeout(typeWriter, 100);
+    }
+  }
+
+  typeWriter();
+
+  // Parallax effect
+  const hero = document.querySelector('.hero');
+  if (hero) {
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+    });
+  }
+</script>

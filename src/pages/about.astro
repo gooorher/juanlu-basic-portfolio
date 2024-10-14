@@ -1,0 +1,165 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ColorSchemeCustomizer from '../components/ColorSchemeCustomizer.astro';
+
+const skills = [
+  { name: 'JavaScript', level: 90 },
+  { name: 'React', level: 85 },
+  { name: 'Node.js', level: 80 },
+  { name: 'Python', level: 75 },
+  { name: 'SQL', level: 70 },
+];
+
+const toolkitItems = [
+  'JavaScript', 'TypeScript', 'React', 'Node.js', 'Express', 'MongoDB', 'SQL',
+  'Python', 'Git', 'Docker', 'AWS', 'GraphQL', 'REST APIs', 'Webpack', 'Babel',
+  'Jest', 'Cypress', 'CI/CD', 'Agile Methodologies'
+];
+---
+
+<Layout title="Juanlu - Sobre mí">
+  <div class="about-container">
+    <h1>Sobre mí</h1>
+    <div class="about-content">
+      <div class="profile-image">
+        <img src="/placeholder-profile.jpg" alt="Juanlu" class="lazy" data-src="/ruta-a-tu-imagen-real" />
+      </div>
+      <div class="bio">
+        <p>
+          [Aquí puedes agregar tu biografía personal]
+        </p>
+      </div>
+    </div>
+    <h2>Mis habilidades</h2>
+    <div class="skills">
+      {skills.map((skill) => (
+        <div class="skill">
+          <span class="skill-name">{skill.name}</span>
+          <div class="skill-bar">
+            <div class="skill-level" style={`width: ${skill.level}%;`} data-level={skill.level}></div>
+          </div>
+        </div>
+      ))}
+    </div>
+    <h2>Mi toolkit</h2>
+    <div class="toolkit">
+      {toolkitItems.map((item) => (
+        <span>{item}</span>
+      ))}
+    </div>
+    <ColorSchemeCustomizer />
+  </div>
+</Layout>
+
+<style>
+  .about-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .about-content {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    align-items: center;
+  }
+
+  .profile-image img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .bio {
+    flex: 1;
+  }
+
+  .skills {
+    margin-bottom: 2rem;
+  }
+
+  .skill {
+    margin-bottom: 1rem;
+  }
+
+  .skill-name {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .skill-bar {
+    background-color: var(--background);
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .skill-level {
+    background-color: var(--primary);
+    height: 100%;
+    width: 0;
+    transition: width 1s ease-in-out;
+  }
+
+  .toolkit {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .toolkit span {
+    background-color: var(--primary);
+    color: var(--background);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+  }
+
+  .toolkit span:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (max-width: 768px) {
+    .about-content {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+</style>
+
+<script>
+  // Animate skill bars on scroll
+  function animateSkillBars() {
+    const skillLevels = document.querySelectorAll('.skill-level');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const level = entry.target.getAttribute('data-level');
+          entry.target.style.width = `${level}%`;
+        }
+      });
+    }, { threshold: 0.5 });
+
+    skillLevels.forEach(skillLevel => {
+      observer.observe(skillLevel);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', animateSkillBars);
+
+  // Toolkit item hover effect
+  const toolkitItems = document.querySelectorAll('.toolkit span');
+  toolkitItems.forEach(item => {
+    item.addEventListener('mouseover', () => {
+      item.style.backgroundColor = 'var(--accent)';
+    });
+    item.addEventListener('mouseout', () => {
+      item.style.backgroundColor = 'var(--primary)';
+    });
+  });
+</script>

@@ -1,0 +1,176 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Juanlu - Contacto">
+  <div class="contact-container">
+    <h1>Contacto</h1>
+    <form class="contact-form" id="contact-form">
+      <div class="form-group">
+        <label for="name">Nombre</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="message">Mensaje</label>
+        <textarea id="message" name="message" required></textarea>
+      </div>
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+</Layout>
+
+<style>
+  .contact-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  input, textarea {
+    padding: 0.8rem;
+    border: 1px solid var(--primary);
+    border-radius: 5px;
+    background-color: var(--background);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s ease;
+  }
+
+  input:focus, textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary);
+  }
+
+  textarea {
+    min-height: 150px;
+    resize: vertical;
+  }
+
+  button {
+    background-color: var(--primary);
+    color: var(--background);
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+  }
+
+  button:hover {
+    background-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .error-message {
+    color: #e53e3e;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+  }
+
+  input.error, textarea.error {
+    border-color: #e53e3e;
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const name = document.getElementById('name');
+    const email = document.getElementById('email');
+    const message = document.getElementById('message');
+    let isValid = true;
+
+    if (name.value.trim() === '') {
+      isValid = false;
+      showError(name, 'Por favor, ingrese su nombre');
+    } else {
+      removeError(name);
+    }
+
+    if (email.value.trim() === '') {
+      isValid = false;
+      showError(email, 'Por favor, ingrese su email');
+    } else if (!isValidEmail(email.value)) {
+      isValid = false;
+      showError(email, 'Por favor, ingrese un email válido');
+    } else {
+      removeError(email);
+    }
+
+    if (message.value.trim() === '') {
+      isValid = false;
+      showError(message, 'Por favor, ingrese un mensaje');
+    } else {
+      removeError(message);
+    }
+
+    if (isValid) {
+      // Aquí puedes agregar la lógica para enviar el formulario
+      alert('Formulario enviado con éxito!');
+      form.reset();
+    }
+  });
+
+  function showError(input, message) {
+    const formGroup = input.parentElement;
+    const error = formGroup.querySelector('.error-message') || document.createElement('div');
+    error.className = 'error-message';
+    error.textContent = message;
+    if (!formGroup.querySelector('.error-message')) {
+      formGroup.appendChild(error);
+    }
+    input.classList.add('error');
+  }
+
+  function removeError(input) {
+    const formGroup = input.parentElement;
+    const error = formGroup.querySelector('.error-message');
+    if (error) {
+      formGroup.removeChild(error);
+    }
+    input.classList.remove('error');
+  }
+
+  function isValidEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
+  // Add floating label effect
+  const inputs = document.querySelectorAll('.contact-form input, .contact-form textarea');
+  inputs.forEach(input => {
+    input.addEventListener('focus', () => {
+      input.labels[0].classList.add('active');
+    });
+    input.addEventListener('blur', () => {
+      if (input.value === '') {
+        input.labels[0].classList.remove('active');
+      }
+    });
+  });
+</script>
